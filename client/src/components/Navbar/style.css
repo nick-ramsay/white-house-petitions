@@ -1,0 +1,17 @@
+.navbar {
+    background-color: #002663;
+    color: #ffffff;
+    vertical-align: middle;
+}
+
+#navbar-title {
+    vertical-align: middle;
+    font-size: 25px;
+    font-weight: bolder;
+    font-family: 'Cormorant Garamond', serif;
+}
+
+#white-house-icon {
+    height: 40px;
+    margin-right: 15px;
+}
