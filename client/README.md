@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+In test, start script must be:  ```react-scripts start```
+
+In production, start script must be: ```serve -s build```
+
 ## Available Scripts
 
 In the project directory, you can run:
