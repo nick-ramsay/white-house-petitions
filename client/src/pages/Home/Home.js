@@ -5,14 +5,16 @@ import "./style.css";
 
 const Home = () => {
 
-    /*
-    var [comments, setComments] = useState(CommentData);
-    var [unacknowledgedCount, setUnacknowledgedCount] = useState(0)
-    */
+    var [initialPetitions, setInitialPetitions] = useState();
+
 
     useEffect(() => {
-        API.testFunction();
+        getInitialPetitions();
     }, []);
+
+    const getInitialPetitions = () => {
+        API.getFirstOneHundredPetitions();
+    }
 
     /*
     const getUnacknowledgedCount = () => {
@@ -59,6 +61,9 @@ const Home = () => {
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                         <span className="sr-only">Next</span>
                     </a>
+                </div>
+                <div className="col-md-12">
+                    <p>Test!</p>
                 </div>
             </div>
         </div>
