@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from "../../components/Navbar/Navbar";
+import API from "../../utils/API";
 import "./style.css";
 
 const Home = () => {
@@ -7,12 +8,13 @@ const Home = () => {
     /*
     var [comments, setComments] = useState(CommentData);
     var [unacknowledgedCount, setUnacknowledgedCount] = useState(0)
+    */
 
     useEffect(() => {
-        setComments(CommentData);
-        getUnacknowledgedCount();
+        API.testFunction();
     }, []);
 
+    /*
     const getUnacknowledgedCount = () => {
         setUnacknowledgedCount(unacknowledgedCount = 0);
         for (var i = 0; i < comments.length; i++) {

@@ -1,0 +1,19 @@
+{
+  "name": "white-house-petitions",
+  "version": "1.0.0",
+  "description": "Application for view White House petitions via We The People API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nick-ramsay/white-house-petitions.git"
+  },
+  "author": "Nick Ramsay",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nick-ramsay/white-house-petitions/issues"
+  },
+  "homepage": "https://github.com/nick-ramsay/white-house-petitions#readme"
+}
