@@ -5,3 +5,7 @@
     min-height: 300px;
     border-radius: 4px;
 }
+
+.carousel-inner {
+    border-radius: 4px;
+}

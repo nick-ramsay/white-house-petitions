@@ -1,14 +1,16 @@
 import axios from "axios";
+import moment from "moment";
 
 require("dotenv").config();
 
 //const apiUrl = process.env.NODE_ENV === 'production' ? '' : '//localhost:3001'
 const keys = require("../keys.js");
 
-
+var unixOneMonthAgo = moment().subtract(30,"day").format("x");
 
 export default {
     getFirstOneHundredPetitions: function () {
+        console.log(unixOneMonthAgo);
         return (
             axios({
                 "method": "GET",
@@ -19,7 +21,8 @@ export default {
                     "x-rapidapi-key": keys.we_the_people.apiKey,
                     "useQueryString": true
                 }, "params": {
-                    "limit": "100"
+                    "limit": "40",
+                    "createdAfter": toString(unixOneMonthAgo)
                 }
             })
                 .then((response) => {
