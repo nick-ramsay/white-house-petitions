@@ -1,16 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import { css } from "@emotion/core";
+import ClipLoader from "react-spinners/ClipLoader";
 import Navbar from "../../components/Navbar/Navbar";
 import API from "../../utils/API";
 import "./style.css";
 
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: #B22234;
+  color: #B22234;
+  `;
+
 const Home = () => {
 
+    var [loading, setLoadingStatus] = useState([true]);
     var [initialPetitions, setInitialPetitions] = useState([]);
 
 
     useEffect(() => {
         API.getFirstOneHundredPetitions()
-            .then(res => { if (res !== undefined) { setInitialPetitions(res) } else { setInitialPetitions([]) } });
+            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false) } else { setInitialPetitions([]) } });
         API.getFirstOneHundredPetitions().then(res => console.log(res));
     }, []);
 
@@ -19,6 +29,12 @@ const Home = () => {
             <Navbar />
             <div className="container">
                 <div id="carouselExampleControls" className="carousel slide mt-3" data-ride="carousel">
+                    <ClipLoader
+                        css={override}
+                        size={150}
+                        color={"#B22234"}
+                        loading={loading}
+                    />
                     <div className="carousel-inner">
                         {initialPetitions.map((petition, index) => (
                             <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"}>
