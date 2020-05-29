@@ -10,7 +10,7 @@ const Home = () => {
 
     useEffect(() => {
         API.getFirstOneHundredPetitions()
-            .then(res => console.log(res)/*setInitialPetitions(res)*/)
+            .then(res => { if (res !== undefined) { setInitialPetitions(res) } else { setInitialPetitions([]) } });
         API.getFirstOneHundredPetitions().then(res => console.log(res));
     }, []);
 
