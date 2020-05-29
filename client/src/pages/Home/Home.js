@@ -9,7 +9,12 @@ const Home = () => {
 
 
     useEffect(() => {
-        API.getFirstOneHundredPetitions().then(res => setInitialPetitions(res));
+        API.getFirstOneHundredPetitions()
+            .then(res => setInitialPetitions(res))
+            .catch((error) => {
+                //console.log(error)
+                setInitialPetitions([])
+            });
         API.getFirstOneHundredPetitions().then(res => console.log(res));
     }, []);
 
@@ -20,7 +25,7 @@ const Home = () => {
                 <div id="carouselExampleControls" className="carousel slide mt-3" data-ride="carousel">
                     <div className="carousel-inner">
                         {initialPetitions.map((petition, index) => (
-                            <div key={index} className={index === 0 ? "carousel-item active":"carousel-item"}>
+                            <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"}>
                                 <h3>{petition.title}</h3>
                             </div>
 
@@ -37,7 +42,7 @@ const Home = () => {
                     </a>
                 </div>
                 <div className="col-md-12">
-                    
+
                 </div>
             </div>
         </div>
