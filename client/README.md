@@ -2,7 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In test, start script must be:  ```react-scripts start```
 
-In production, start script must be: ```serve -s build```
+In production(Heroku), start script must be: ```serve -s build```
 
 ## Available Scripts
 
