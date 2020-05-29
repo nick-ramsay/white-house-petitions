@@ -5,37 +5,12 @@ import "./style.css";
 
 const Home = () => {
 
-    var [initialPetitions, setInitialPetitions] = useState();
+    var [initialPetitions, setInitialPetitions] = useState([]);
 
 
     useEffect(() => {
-        getInitialPetitions();
+        API.getFirstOneHundredPetitions().then(res => setInitialPetitions(res));
     }, []);
-
-    const getInitialPetitions = () => {
-        API.getFirstOneHundredPetitions();
-    }
-
-    /*
-    const getUnacknowledgedCount = () => {
-        setUnacknowledgedCount(unacknowledgedCount = 0);
-        for (var i = 0; i < comments.length; i++) {
-            if (comments[i].acknowledged === false) {
-                setUnacknowledgedCount(unacknowledgedCount += 1);
-            }
-        }
-    }
-
-    const setCommentRead = event => {
-        event.preventDefault();
-        var currentComments = comments;
-        var selectedCommentIndex = event.currentTarget.dataset.commentIndex;
-        currentComments[selectedCommentIndex].acknowledged = true;
-        setComments(comments => currentComments);
-        getUnacknowledgedCount();
-    }
-
-    */
 
     return (
         <div>
@@ -63,7 +38,10 @@ const Home = () => {
                     </a>
                 </div>
                 <div className="col-md-12">
-                    <p>Test!</p>
+                    {initialPetitions.map((petition, index) => (
+                        <strong><p key={index}>{petition.title}...</p></strong>
+                    ))
+                    }
                 </div>
             </div>
         </div>
