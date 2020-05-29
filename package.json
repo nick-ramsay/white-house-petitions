@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/nick-ramsay/white-house-petitions/issues"
   },
-  "homepage": "https://github.com/nick-ramsay/white-house-petitions#readme"
+  "homepage": "https://github.com/nick-ramsay/white-house-petitions#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
