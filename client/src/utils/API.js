@@ -6,11 +6,10 @@ require("dotenv").config();
 //const apiUrl = process.env.NODE_ENV === 'production' ? '' : '//localhost:3001'
 const keys = require("../keys.js");
 
-var unixOneMonthAgo = moment().subtract(30,"day").format("x");
+var unixOneMonthAgo = moment().subtract(30,"day").format("X");
 
 export default {
     getFirstOneHundredPetitions: function () {
-        console.log(unixOneMonthAgo);
         return (
             axios({
                 "method": "GET",
@@ -22,7 +21,7 @@ export default {
                     "useQueryString": true
                 }, "params": {
                     "limit": "40",
-                    "createdAfter": toString(unixOneMonthAgo)
+                    "createdAfter": unixOneMonthAgo
                 }
             })
                 .then((response) => {
