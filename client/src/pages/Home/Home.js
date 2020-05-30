@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/core";
+import carouselImages from "../../images/carousel-images/white-house-day.jpg";
 import moment from "moment";
 import ClipLoader from "react-spinners/ClipLoader";
 import Navbar from "../../components/Navbar/Navbar";
@@ -38,13 +39,13 @@ const Home = () => {
                     />
                     <div className="carousel-inner pr-1 pl-1">
                         {initialPetitions.map((petition, index) => (
-                            <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"}>
+                            <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{backgroundImage: `url(${carouselImages})`}}>
                                 <h4 className="col-md-10 offset-md-1"><strong>{petition.title}</strong></h4>
                                 <p>{moment(moment.unix(petition.created)).format("LL")}</p>
                                 <p>{petition.signatureCount} of {petition.signatureThreshold} signatures received</p>
                                 <p>Due by {moment(moment.unix(petition.deadline)).format("LL")}</p>
                                 <p>{moment(moment.unix(petition.deadline)).diff(moment(),'days')} day(s) remaining</p>
-                                <a href={petition.url} class="btn btn-dark btn-sm active" role="button" aria-pressed="true" target="_blank" rel="noopener noreferrer">View Petition</a>
+                                <a href={petition.url} class="btn btn-custom btn-sm active carouselViewPetitionBtn" role="button" aria-pressed="true" target="_blank" rel="noopener noreferrer">View Petition</a>
                             </div>
                         ))
                         }

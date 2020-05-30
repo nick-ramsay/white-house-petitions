@@ -1,11 +1,21 @@
 .carousel-item {
-    background-color: #9b1c2c;
+    /*background-color: #9b1c2c;*/
     color: #ffffff;
     text-align: center;
     min-height: 300px;
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.75);
+    background-blend-mode: darken;
+    background-position:center center;
+    background-size:cover;
 }
 
-.carousel-inner {
-    border-radius: 4px;
+.carouselViewPetitionBtn {
+    background-color:#CC0C2F;
+    color: #ffffff;
+    animation: none;
+}
+
+.carouselViewPetitionBtn:hover {
+    color: whitesmoke;
+    background-color: #9b1c2c;
 }
