@@ -13,7 +13,7 @@ export default {
         return (
             axios({
                 "method": "GET",
-                "url": "https://cors-anywhere.herokuapp.com/https://community-we-the-people.p.rapidapi.com/petitions",
+                "url": "https://community-we-the-people.p.rapidapi.com/petitions",
                 "headers": {
                     "content-type": "application/octet-stream",
                     "x-rapidapi-host": "community-we-the-people.p.rapidapi.com",
