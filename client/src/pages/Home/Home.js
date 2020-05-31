@@ -15,10 +15,33 @@ const override = css`
   `;
 
 const Home = () => {
+
+    const useInput = (initialValue) => {
+        const [value,setValue] = useState(initialValue);
+     
+         function handleChange(e){
+             setValue(e.target.value);
+         }
+     
+        return [value,handleChange];
+     } //This dynamicaly sets react hooks as respective form inputs are updated...
+
     var unixOneMonthAgo = moment().subtract(30, "day").format("X");
 
     var [loading, setLoadingStatus] = useState([true]);
     var [initialPetitions, setInitialPetitions] = useState([]);
+    var [petitionSearchResults, setPetitionSearchResults] = useState([]);
+    
+    var [inputTitle, setInputTitle] = useInput("");
+    var [inputLimit, setInputLimit] = useInput(25);
+
+
+    const petitionSearch = () => {
+        console.log("Searched!");
+        API.getFirstOneHundredPetitions("", unixOneMonthAgo, "", inputLimit, inputTitle, "", "", "", "", "", "")
+            //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
+            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); console.log(res) } else { setPetitionSearchResults([]) } });
+    }
 
 
     useEffect(() => {
@@ -62,78 +85,85 @@ const Home = () => {
                         </a>
                     </div>
                 </div>
-                <div className="searchContainer mt-3">
-                    <h2 className="text-center">Search for Petitions</h2>
+                <div id="searchParameters" className="mt-3">
+                    <h4 className="text-center">Search for Petitions</h4>
                     <form>
                         <div className="form-row text-center">
                             <div className="form-group col-md-11 mt-1">
-                                <input className="form-control" type="text" placeholder="Search for terms in petition descriptions" />
+                                <input className="form-control" type="text" id="inputTitle" name="inputTitle" onChange={setInputTitle} placeholder="Search for terms in petition titles..." />
                             </div>
                             <div className="form-group col-md-1 mt-1">
-                                <button className="btn btn-primary">Search</button>
+                                <button className="btn btn-primary" type="button" onClick={petitionSearch}>Search</button>
                             </div>
                             <div className="form-group col-md-2 mt-1">
-                                <button class="btn text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <button className="btn text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                     Advanced Search
-                                    </button>
+                                </button>
                             </div>
                         </div>
                     </form>
-
-                    <div class="accordion" id="advancedSearchParameters">
-                        <div class="card">
-                            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                <div class="card-body">
+                    <div className="accordion" id="advancedSearchParameters">
+                        <div className="card">
+                            <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div className="card-body">
                                     <form>
                                         <div className="form-row">
-                                            <div className="form-group col-md-6">
-                                                <label for="inputEmail4">Email</label>
-                                                <input type="email" className="form-control" id="inputEmail4" />
+                                            <div className="form-group col-md-12">
+                                                <label for="inputPetition">Petition Description</label>
+                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." />
                                             </div>
-                                            <div className="form-group col-md-6">
-                                                <label for="inputPassword4">Password</label>
-                                                <input type="password" className="form-control" id="inputPassword4" />
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <label for="inputAddress">Address</label>
-                                            <input type="text" className="form-control" id="inputAddress" placeholder="1234 Main St" />
-                                        </div>
-                                        <div className="form-group">
-                                            <label for="inputAddress2">Address 2</label>
-                                            <input type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" />
                                         </div>
                                         <div className="form-row">
-                                            <div className="form-group col-md-6">
-                                                <label for="inputCity">City</label>
-                                                <input type="text" className="form-control" id="inputCity" />
+                                            <div className="form-group col-md-3">
+                                                <label for="inputCreatedBefore">Created Before</label>
+                                                <input type="date" className="form-control" id="inputCreatedBefore" />
                                             </div>
-                                            <div className="form-group col-md-4">
-                                                <label for="inputState">State</label>
-                                                <select id="inputState" className="form-control">
-                                                    <option selected>Choose...</option>
-                                                    <option>...</option>
+                                            <div className="form-group col-md-3">
+                                                <label for="inputCreatedAfter">Created After</label>
+                                                <input type="date" className="form-control" id="inputCreatedAfter" />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label for="inputStatus">Status</label>
+                                                <select id="inputStatus" className="form-control">
+                                                    <option selected>Any</option>
+                                                    <option>Open</option>
+                                                    <option>Closed</option>
                                                 </select>
                                             </div>
-                                            <div className="form-group col-md-2">
-                                                <label for="inputZip">Zip</label>
-                                                <input type="text" className="form-control" id="inputZip" />
+                                            <div className="form-group col-md-3">
+                                                <label for="inputResultLimit">Result Limit</label>
+                                                <input type="number" className="form-control" id="inputResultLimit" defaultValue="25" onChange={setInputLimit} />
                                             </div>
                                         </div>
-                                        <div className="form-group">
-                                            <div className="form-check">
-                                                <input className="form-check-input" type="checkbox" id="gridCheck" />
-                                                <label className="form-check-label" for="gridCheck">
-                                                    Check me out
-                                                </label>
+                                        <div className="form-row">
+                                            <div className="form-group col-md-3">
+                                                <label for="inputMinSignatureThreshold">Minimum Signature Threshold</label>
+                                                <input type="number" className="form-control" id="inputMinSignatureThreshold" />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label for="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
+                                                <input type="number" className="form-control" id="inputMaxSignatureThreshold" />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label for="inputMinSignatureCollected">Minimum Signatures Collected</label>
+                                                <input type="number" className="form-control" id="inputMinSignatureCollected" />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label for="inputMaxSignatureCollected">Minimum Signatures Collected</label>
+                                                <input type="number" className="form-control" id="inputMaxSignatureCollected" />
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn btn-primary">Sign in</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div id="searchResults">
+                    {petitionSearchResults.map((searchResult, index) => (
+                        <p>{searchResult.title}</p>
+                    ))
+                    }
                 </div>
             </div>
         </div>
