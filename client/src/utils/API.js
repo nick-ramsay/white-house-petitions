@@ -1,5 +1,4 @@
 import axios from "axios";
-import moment from "moment";
 
 require("dotenv").config();
 
@@ -9,6 +8,8 @@ const keys = require("../keys.js");
 export default {
     getFirstOneHundredPetitions: function (createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status) {
         //console.log(createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status);
+        console.log(status);
+        console.log(title);
         return (
             axios({
                 "method": "GET",
@@ -19,17 +20,17 @@ export default {
                     "x-rapidapi-key": keys.we_the_people.apiKey,
                     "useQueryString": true
                 }, "params": {
-                    "createdBefore": createdBefore,
-                    "createdAfter": createdAfter,
-                    "offset": offset,
-                    "limit": limit,
-                    "title": title,
-                    "body": body,
-                    "signatureThresholdCeiling": signatureThresholdCeiling,
-                    "signatureThresholdFloor": signatureThresholdFloor,
-                    "signatureCountCeiling": signatureCountCeiling,
-                    "signatureCountFloor": signatureCountFloor,
-                    "status": status
+                    "createdBefore": createdBefore ? createdBefore:"",
+                    "createdAfter": createdAfter ? createdAfter:"",
+                    "offset": offset ? offset:"",
+                    "limit": limit ? limit:"",
+                    "title": title ? title:"",
+                    "body": body ? body:"",
+                    "signatureThresholdCeiling": signatureThresholdCeiling ? signatureThresholdCeiling:"",
+                    "signatureThresholdFloor": signatureThresholdFloor ? signatureThresholdFloor:"",
+                    "signatureCountCeiling": signatureCountCeiling ? signatureCountCeiling:"",
+                    "signatureCountFloor": signatureCountFloor ? signatureCountFloor:"",
+                    "status": status ? status:""
                 }
             })
                 .then((response) => {

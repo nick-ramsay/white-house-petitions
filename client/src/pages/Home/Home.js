@@ -22,10 +22,9 @@ const Home = () => {
 
 
     useEffect(() => {
-        API.getFirstOneHundredPetitions("","","","","","","","","","","")
+        API.getFirstOneHundredPetitions("",unixOneMonthAgo,"",25,"","","","","","","")
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false) } else { setInitialPetitions([]) } });
-        API.getFirstOneHundredPetitions().then(res => console.log(res));
+            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); console.log(res) } else { setInitialPetitions([]) } });
     }, []);
 
     return (
