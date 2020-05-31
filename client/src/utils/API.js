@@ -6,10 +6,9 @@ require("dotenv").config();
 //const apiUrl = process.env.NODE_ENV === 'production' ? '' : '//localhost:3001'
 const keys = require("../keys.js");
 
-var unixOneMonthAgo = moment().subtract(30,"day").format("X");
-
 export default {
-    getFirstOneHundredPetitions: function () {
+    getFirstOneHundredPetitions: function (createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status) {
+        //console.log(createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status);
         return (
             axios({
                 "method": "GET",
@@ -20,8 +19,17 @@ export default {
                     "x-rapidapi-key": keys.we_the_people.apiKey,
                     "useQueryString": true
                 }, "params": {
-                    "limit": "40",
-                    "createdAfter": unixOneMonthAgo
+                    "createdBefore": createdBefore,
+                    "createdAfter": createdAfter,
+                    "offset": offset,
+                    "limit": limit,
+                    "title": title,
+                    "body": body,
+                    "signatureThresholdCeiling": signatureThresholdCeiling,
+                    "signatureThresholdFloor": signatureThresholdFloor,
+                    "signatureCountCeiling": signatureCountCeiling,
+                    "signatureCountFloor": signatureCountFloor,
+                    "status": status
                 }
             })
                 .then((response) => {

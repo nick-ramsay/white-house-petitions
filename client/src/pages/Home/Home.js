@@ -15,13 +15,15 @@ const override = css`
   `;
 
 const Home = () => {
+    var unixOneMonthAgo = moment().subtract(30,"day").format("X");
 
     var [loading, setLoadingStatus] = useState([true]);
     var [initialPetitions, setInitialPetitions] = useState([]);
 
 
     useEffect(() => {
-        API.getFirstOneHundredPetitions()
+        API.getFirstOneHundredPetitions("","","","","","","","","","","")
+            //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
             .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false) } else { setInitialPetitions([]) } });
         API.getFirstOneHundredPetitions().then(res => console.log(res));
     }, []);
@@ -45,7 +47,7 @@ const Home = () => {
                                 <p>{petition.signatureCount} of {petition.signatureThreshold} signatures received</p>
                                 <p>Due by {moment(moment.unix(petition.deadline)).format("LL")}</p>
                                 <p>{moment(moment.unix(petition.deadline)).diff(moment(),'days')} day(s) remaining</p>
-                                <a href={petition.url} class="btn btn-custom btn-sm active carouselViewPetitionBtn" role="button" aria-pressed="true" target="_blank" rel="noopener noreferrer">View Petition</a>
+                                <a href={petition.url} className="btn btn-custom btn-sm active carouselViewPetitionBtn" role="button" aria-pressed="true" target="_blank" rel="noopener noreferrer">View Petition</a>
                             </div>
                         ))
                         }
