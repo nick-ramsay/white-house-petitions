@@ -17,21 +17,21 @@ const override = css`
 const Home = () => {
 
     const useInput = (initialValue) => {
-        const [value,setValue] = useState(initialValue);
-     
-         function handleChange(e){
-             setValue(e.target.value);
-         }
-     
-        return [value,handleChange];
-     } //This dynamicaly sets react hooks as respective form inputs are updated...
+        const [value, setValue] = useState(initialValue);
+
+        function handleChange(e) {
+            setValue(e.target.value);
+        }
+
+        return [value, handleChange];
+    } //This dynamicaly sets react hooks as respective form inputs are updated...
 
     var unixOneMonthAgo = moment().subtract(30, "day").format("X");
 
     var [loading, setLoadingStatus] = useState([true]);
     var [initialPetitions, setInitialPetitions] = useState([]);
     var [petitionSearchResults, setPetitionSearchResults] = useState([]);
-    
+
     var [inputTitle, setInputTitle] = useInput("");
     var [inputLimit, setInputLimit] = useInput(25);
 
@@ -89,14 +89,14 @@ const Home = () => {
                     <h4 className="text-center">Search for Petitions</h4>
                     <form>
                         <div className="form-row text-center">
-                            <div className="form-group col-md-11 mt-1">
+                            <div className="form-group col-md-12 mt-1">
                                 <input className="form-control" type="text" id="inputTitle" name="inputTitle" onChange={setInputTitle} placeholder="Search for terms in petition titles..." />
                             </div>
-                            <div className="form-group col-md-1 mt-1">
-                                <button className="btn btn-primary" type="button" onClick={petitionSearch}>Search</button>
-                            </div>
-                            <div className="form-group col-md-2 mt-1">
-                                <button className="btn text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        </div>
+                        <div className="form-row">
+                            <div className="form-group col-md-12 mt-1 text-center">
+                                <button className="btn btn-primary m-1" type="button" onClick={petitionSearch}>Search</button>
+                                <button className="btn btn-dark text-left m-1" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                     Advanced Search
                                 </button>
                             </div>

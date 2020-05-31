@@ -19,3 +19,7 @@
     color: whitesmoke;
     background-color: #9b1c2c;
 }
+
+.card {
+    border: none;
+}
