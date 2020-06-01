@@ -164,15 +164,19 @@ const Home = () => {
                     </div>
                 </div>
                 <div id="searchResults">
+                    <p className="text-center">{petitionSearchResults.length} results returned</p>
                     {petitionSearchResults.map((searchResult, index) => (
                         <div key={index} class="card mt-3">
                             <div class="card-body">
                                 <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
                                 <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
-                                {searchResult.issues.map((resultIssue, index) => (
-                                    <span key={index} class="badge badge-warning mr-1">{decode(resultIssue.name)}</span>
-                                ))
-                                }
+                                <div>
+                                    {searchResult.issues.map((resultIssue, index) => (
+                                        <span key={index} class="badge badge-warning mr-1">{decode(resultIssue.name)}</span>
+                                    ))
+                                    }
+                                </div>
+                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" class="btn btn-sm btn-outline-danger mt-2">View Petition</button></a>
                             </div>
                         </div>
                     ))
