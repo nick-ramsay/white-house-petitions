@@ -16,6 +16,10 @@ const override = css`
 
 const Home = () => {
 
+    const decode = (str) => {
+        return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+    }
+
     const useInput = (initialValue) => {
         const [value, setValue] = useState(initialValue);
 
@@ -65,7 +69,7 @@ const Home = () => {
                         <div className="carousel-inner pr-1 pl-1">
                             {initialPetitions.map((petition, index) => (
                                 <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImages})` }}>
-                                    <h4 className="col-md-10 offset-md-1"><strong>{petition.title}</strong></h4>
+                                    <h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4>
                                     <p>{moment(moment.unix(petition.created)).format("LL")}</p>
                                     <p>{petition.signatureCount} of {petition.signatureThreshold} signatures received</p>
                                     <p>Due by {moment(moment.unix(petition.deadline)).format("LL")}</p>
@@ -161,7 +165,16 @@ const Home = () => {
                 </div>
                 <div id="searchResults">
                     {petitionSearchResults.map((searchResult, index) => (
-                        <p>{searchResult.title}</p>
+                        <div key={index} class="card mt-3">
+                            <div class="card-body">
+                                <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
+                                <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
+                                {searchResult.issues.map((resultIssue, index) => (
+                                    <span key={index} class="badge badge-warning mr-1">{decode(resultIssue.name)}</span>
+                                ))
+                                }
+                            </div>
+                        </div>
                     ))
                     }
                 </div>
