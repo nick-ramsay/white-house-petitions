@@ -25,8 +25,9 @@ const Home = () => {
 
         function handleChange(e) {
             setValue(e.target.value);
+            console.log(e.target.value);
         }
-
+        
         return [value, handleChange];
     } //This dynamicaly sets react hooks as respective form inputs are updated...
 
@@ -37,12 +38,20 @@ const Home = () => {
     var [petitionSearchResults, setPetitionSearchResults] = useState([]);
 
     var [inputTitle, setInputTitle] = useInput("");
-    var [inputLimit, setInputLimit] = useInput(25);
+    var [inputBody, setInputBody] = useInput("");
+    var [inputCreatedBefore, setInputCreatedBefore] = useInput("");
+    var [inputCreatedAfter, setInputCreatedAfter] = useInput("");
+    var [inputStatus, setInputStatus] = useInput("");
+    var [inputLimit, setInputLimit] = useInput("");
+    var [inputMinSignatureThreshold, setInputMinSignatureThreshold] = useInput("");
+    var [inputMaxSignatureThreshold, setInputMaxSignatureThreshold] = useInput("");
+    var [inputMinSignatureCollected, setInputMinSignatureCollected] = useInput("");
+    var [inputMaxSignatureCollected, setInputMaxSignatureCollected] = useInput("");
 
 
     const petitionSearch = () => {
         console.log("Searched!");
-        API.getFirstOneHundredPetitions("", unixOneMonthAgo, "", inputLimit, inputTitle, "", "", "", "", "", "")
+        API.getFirstOneHundredPetitions("", unixOneMonthAgo, "", inputLimit, inputTitle, inputBody, inputMaxSignatureThreshold,inputMinSignatureThreshold, inputMaxSignatureCollected, inputMinSignatureCollected, inputStatus)
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
             .then(res => { if (res !== undefined) { setPetitionSearchResults(res); console.log(res) } else { setPetitionSearchResults([]) } });
     }
@@ -114,24 +123,24 @@ const Home = () => {
                                         <div className="form-row">
                                             <div className="form-group col-md-12">
                                                 <label for="inputPetition">Petition Description</label>
-                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." />
+                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody}/>
                                             </div>
                                         </div>
                                         <div className="form-row">
                                             <div className="form-group col-md-3">
                                                 <label for="inputCreatedBefore">Created Before</label>
-                                                <input type="date" className="form-control" id="inputCreatedBefore" />
+                                                <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore}/>
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputCreatedAfter">Created After</label>
-                                                <input type="date" className="form-control" id="inputCreatedAfter" />
+                                                <input type="date" className="form-control" id="inputCreatedAfter" onChange={setInputCreatedAfter}/>
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputStatus">Status</label>
-                                                <select id="inputStatus" className="form-control">
-                                                    <option selected>Any</option>
-                                                    <option>Open</option>
-                                                    <option>Closed</option>
+                                                <select id="inputStatus" className="form-control" onChange={setInputStatus}>
+                                                    <option value="" selected>Any</option>
+                                                    <option value="open">Open</option>
+                                                    <option value="closed">Closed</option>
                                                 </select>
                                             </div>
                                             <div className="form-group col-md-3">
@@ -142,19 +151,19 @@ const Home = () => {
                                         <div className="form-row">
                                             <div className="form-group col-md-3">
                                                 <label for="inputMinSignatureThreshold">Minimum Signature Threshold</label>
-                                                <input type="number" className="form-control" id="inputMinSignatureThreshold" />
+                                                <input type="number" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold}/>
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
-                                                <input type="number" className="form-control" id="inputMaxSignatureThreshold" />
+                                                <input type="number" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold}/>
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputMinSignatureCollected">Minimum Signatures Collected</label>
-                                                <input type="number" className="form-control" id="inputMinSignatureCollected" />
+                                                <input type="number" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected}/>
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputMaxSignatureCollected">Minimum Signatures Collected</label>
-                                                <input type="number" className="form-control" id="inputMaxSignatureCollected" />
+                                                <input type="number" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected}/>
                                             </div>
                                         </div>
                                     </form>
