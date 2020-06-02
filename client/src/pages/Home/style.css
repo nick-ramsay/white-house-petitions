@@ -13,15 +13,34 @@ p {
     background-size:cover;
 }
 
+.view-petition-result-btn, .search-btn {
+    color: #ffffff;
+    background-color: #9b1c2c;
+    border: 1px #9b1c2c solid;
+}
+
+.view-petition-result-btn:hover, .search-btn:hover {
+    background-color: #ffffff;
+    color: #9b1c2c;
+    border: 1px #9b1c2c solid;
+}
+
 .carouselViewPetitionBtn {
     background-color:#CC0C2F;
     color: #ffffff;
+    border: 1px #CC0C2F solid;
     animation: none;
 }
 
 .carouselViewPetitionBtn:hover {
-    color: whitesmoke;
-    background-color: #9b1c2c;
+    color: #CC0C2F;
+    background-color: #ffffff;
+    border: 1px #CC0C2F solid;
+}
+
+.petition-category-badge {
+    color: #ffffff;
+    background-color: #002663;
 }
 
 .card {
@@ -31,4 +50,22 @@ p {
 .search-result-details {
     line-height: 1em;
     padding: 0.3em 0 0.3em 0;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    border-radius: 10px;
+}
+  
+::-webkit-scrollbar-track {
+    background: whitesmoke; 
+}
+   
+::-webkit-scrollbar-thumb {
+    background: #CC0C2F;
+    //border-radius: 10px;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background: #9b1c2c; 
 }

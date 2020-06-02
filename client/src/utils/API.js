@@ -8,9 +8,6 @@ const keys = require("../keys.js");
 export default {
     getFirstOneHundredPetitions: function (createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status) {
         //console.log(createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status);
-        console.log(status);
-        console.log(title);
-        console.log(limit);
         return (
             axios({
                 "method": "GET",

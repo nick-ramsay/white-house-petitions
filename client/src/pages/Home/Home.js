@@ -25,15 +25,16 @@ const Home = () => {
 
         function handleChange(e) {
             setValue(e.target.value);
-            console.log(e.target.value);
         }
-        
+
         return [value, handleChange];
     } //This dynamicaly sets react hooks as respective form inputs are updated...
 
     var unixOneMonthAgo = moment().subtract(30, "day").format("X");
 
     var [loading, setLoadingStatus] = useState([true]);
+    var [searching, setSearchingStatus] = useState("");
+    var [firstSearchExecuted, setFirstSearchExecuted] = useState("")
     var [initialPetitions, setInitialPetitions] = useState([]);
     var [petitionSearchResults, setPetitionSearchResults] = useState([]);
 
@@ -50,10 +51,11 @@ const Home = () => {
 
 
     const petitionSearch = () => {
-        console.log("Searched!");
-        API.getFirstOneHundredPetitions("", unixOneMonthAgo, "", inputLimit, inputTitle, inputBody, inputMaxSignatureThreshold,inputMinSignatureThreshold, inputMaxSignatureCollected, inputMinSignatureCollected, inputStatus)
+        setPetitionSearchResults([]);
+        setSearchingStatus(true);
+        API.getFirstOneHundredPetitions(moment(inputCreatedBefore, "YYYY-MM-DD").format("X"), moment(inputCreatedAfter, "YYYY-MM-DD").format("X"), "", inputLimit, inputTitle, inputBody, inputMaxSignatureThreshold, inputMinSignatureThreshold, inputMaxSignatureCollected, inputMinSignatureCollected, inputStatus)
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); console.log(res) } else { setPetitionSearchResults([]) } });
+            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); setSearchingStatus(false);setFirstSearchExecuted(true); console.log(res) } else { setPetitionSearchResults([]) } });
     }
 
 
@@ -108,7 +110,7 @@ const Home = () => {
                         </div>
                         <div className="form-row">
                             <div className="form-group col-md-12 mt-1 text-center">
-                                <button className="btn btn-primary m-1" type="button" onClick={petitionSearch}>Search</button>
+                                <button className="btn search-btn m-1" type="button" onClick={petitionSearch}>Search</button>
                                 <button className="btn btn-dark text-left m-1" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                     Advanced Search
                                 </button>
@@ -123,17 +125,17 @@ const Home = () => {
                                         <div className="form-row">
                                             <div className="form-group col-md-12">
                                                 <label for="inputPetition">Petition Description</label>
-                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody}/>
+                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody} />
                                             </div>
                                         </div>
                                         <div className="form-row">
                                             <div className="form-group col-md-3">
-                                                <label for="inputCreatedBefore">Created Before</label>
-                                                <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore}/>
+                                                <label for="inputCreatedAfter">Created After</label>
+                                                <input type="date" className="form-control" id="inputCreatedAfter" name="inputCreatedAfter" onChange={setInputCreatedAfter} />
                                             </div>
                                             <div className="form-group col-md-3">
-                                                <label for="inputCreatedAfter">Created After</label>
-                                                <input type="date" className="form-control" id="inputCreatedAfter" onChange={setInputCreatedAfter}/>
+                                                <label for="inputCreatedBefore">Created Before</label>
+                                                <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore} />
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputStatus">Status</label>
@@ -145,25 +147,25 @@ const Home = () => {
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputResultLimit">Result Limit</label>
-                                                <input type="number" className="form-control" id="inputResultLimit" defaultValue="25" onChange={setInputLimit} />
+                                                <input type="number" min="0" max="1000" className="form-control" id="inputResultLimit" onChange={setInputLimit} />
                                             </div>
                                         </div>
                                         <div className="form-row">
                                             <div className="form-group col-md-3">
                                                 <label for="inputMinSignatureThreshold">Minimum Signature Threshold</label>
-                                                <input type="number" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold}/>
+                                                <input type="number" min="0" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold} />
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
-                                                <input type="number" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold}/>
+                                                <input type="number" min="0" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold} />
                                             </div>
                                             <div className="form-group col-md-3">
                                                 <label for="inputMinSignatureCollected">Minimum Signatures Collected</label>
-                                                <input type="number" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected}/>
+                                                <input type="number" min="0" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected} />
                                             </div>
                                             <div className="form-group col-md-3">
-                                                <label for="inputMaxSignatureCollected">Minimum Signatures Collected</label>
-                                                <input type="number" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected}/>
+                                                <label for="inputMaxSignatureCollected">Maximum Signatures Collected</label>
+                                                <input type="number" min="0" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected} />
                                             </div>
                                         </div>
                                     </form>
@@ -173,19 +175,25 @@ const Home = () => {
                     </div>
                 </div>
                 <div id="searchResults">
-                    <p className="text-center">{petitionSearchResults.length} results returned</p>
+                <p className="text-center">{(firstSearchExecuted === true && searching === false) ? petitionSearchResults.length + " " + (petitionSearchResults.length === 1 ? "result":"results") + " returned":" "}</p>
+                    <ClipLoader
+                        css={override}
+                        size={150}
+                        color={"#B22234"}
+                        loading={searching}
+                    />
                     {petitionSearchResults.map((searchResult, index) => (
-                        <div key={index} class="card mt-3">
+                        <div key={index} className="card mt-3">
                             <div class="card-body">
                                 <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
-                                <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
-                                <div>
+                                <div className="pb-2">
                                     {searchResult.issues.map((resultIssue, index) => (
-                                        <span key={index} class="badge badge-warning mr-1">{decode(resultIssue.name)}</span>
+                                        <span key={index} class="badge petition-category-badge mr-1">{decode(resultIssue.name)}</span>
                                     ))
                                     }
                                 </div>
-                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" class="btn btn-sm btn-outline-danger mt-2">View Petition</button></a>
+                                <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
+                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" class="btn btn-sm btn-outline view-petition-result-btn mt-2">View Petition</button></a>
                             </div>
                         </div>
                     ))
