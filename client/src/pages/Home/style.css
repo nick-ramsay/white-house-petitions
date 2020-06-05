@@ -40,6 +40,17 @@ border-color: none;
     border: 1px #9b1c2c solid; 
 }
 
+.carouselPetitionLink {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.carouselPetitionLink:hover {
+    color: rgba(255, 255, 255, 0.86);
+    animation: none;
+    text-decoration: none;
+}
+
 .carouselViewPetitionBtn {
     background-color:#CC0C2F;
     color: #ffffff;

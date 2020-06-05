@@ -81,12 +81,9 @@ const Home = () => {
                         <div className="carousel-inner pr-1 pl-1">
                             {initialPetitions.map((petition, index) => (
                                 <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImages})` }}>
-                                    <h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4>
-                                    <p>{moment(moment.unix(petition.created)).format("LL")}</p>
-                                    <p>{petition.signatureCount} of {petition.signatureThreshold} signatures received</p>
-                                    <p>Due by {moment(moment.unix(petition.deadline)).format("LL")}</p>
+                                    <a href={petition.url} target="blank" className="carouselPetitionLink" role="button"><h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4></a>
+                                    <p>{(petition.signatureCount < petition.signatureThreshold) ? (petition.signatureThreshold - petition.signatureCount) + " signatures are still needed...":"Threshold met with " + petition.signatureCount + " signatures!"}</p>
                                     <p>{moment(moment.unix(petition.deadline)).diff(moment(), 'days')} day(s) remaining</p>
-                                    <a href={petition.url} className="btn btn-custom btn-sm active carouselViewPetitionBtn" role="button" aria-pressed="true" target="_blank" rel="noopener noreferrer">View Petition</a>
                                 </div>
                             ))
                             }
