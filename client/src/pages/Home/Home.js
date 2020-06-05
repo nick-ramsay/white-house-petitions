@@ -55,7 +55,7 @@ const Home = () => {
         setSearchingStatus(true);
         API.getFirstOneHundredPetitions(moment(inputCreatedBefore, "YYYY-MM-DD").format("X"), moment(inputCreatedAfter, "YYYY-MM-DD").format("X"), "", inputLimit, inputTitle, inputBody, inputMaxSignatureThreshold, inputMinSignatureThreshold, inputMaxSignatureCollected, inputMinSignatureCollected, inputStatus)
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); setSearchingStatus(false);setFirstSearchExecuted(true); console.log(res) } else { setPetitionSearchResults([]) } });
+            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); setSearchingStatus(false); setFirstSearchExecuted(true); console.log(res) } else { setPetitionSearchResults([]) } });
     }
 
 
@@ -108,6 +108,62 @@ const Home = () => {
                                 <input className="form-control" type="text" id="inputTitle" name="inputTitle" onChange={setInputTitle} placeholder="Search for terms in petition titles..." />
                             </div>
                         </div>
+                        <div className="accordion" id="advancedSearchParameters">
+                            <div className="card">
+                                <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                    <div className="card-body">
+                                        <form>
+                                            <div className="form-row">
+                                                <div className="form-group col-md-12">
+                                                    <label for="inputPetition">Petition Description</label>
+                                                    <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody} />
+                                                </div>
+                                            </div>
+                                            <div className="form-row">
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputCreatedAfter">Created After</label>
+                                                    <input type="date" className="form-control" id="inputCreatedAfter" name="inputCreatedAfter" onChange={setInputCreatedAfter} />
+                                                </div>
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputCreatedBefore">Created Before</label>
+                                                    <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore} />
+                                                </div>
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputStatus">Status</label>
+                                                    <select id="inputStatus" className="form-control" onChange={setInputStatus}>
+                                                        <option value="" selected>Any</option>
+                                                        <option value="open">Open</option>
+                                                        <option value="closed">Closed</option>
+                                                    </select>
+                                                </div>
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputResultLimit">Result Limit</label>
+                                                    <input type="number" min="0" max="1000" className="form-control" id="inputResultLimit" onChange={setInputLimit} />
+                                                </div>
+                                            </div>
+                                            <div className="form-row">
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputMinSignatureThreshold">Minimum Signature Threshold</label>
+                                                    <input type="number" min="0" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold} />
+                                                </div>
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
+                                                    <input type="number" min="0" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold} />
+                                                </div>
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputMinSignatureCollected">Minimum Signatures Collected</label>
+                                                    <input type="number" min="0" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected} />
+                                                </div>
+                                                <div className="form-group col-md-3">
+                                                    <label for="inputMaxSignatureCollected">Maximum Signatures Collected</label>
+                                                    <input type="number" min="0" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected} />
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div className="form-row">
                             <div className="form-group col-md-12 mt-1 text-center">
                                 <button className="btn search-btn m-1" type="button" onClick={petitionSearch}>Search</button>
@@ -117,65 +173,9 @@ const Home = () => {
                             </div>
                         </div>
                     </form>
-                    <div className="accordion" id="advancedSearchParameters">
-                        <div className="card">
-                            <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                <div className="card-body">
-                                    <form>
-                                        <div className="form-row">
-                                            <div className="form-group col-md-12">
-                                                <label for="inputPetition">Petition Description</label>
-                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody} />
-                                            </div>
-                                        </div>
-                                        <div className="form-row">
-                                            <div className="form-group col-md-3">
-                                                <label for="inputCreatedAfter">Created After</label>
-                                                <input type="date" className="form-control" id="inputCreatedAfter" name="inputCreatedAfter" onChange={setInputCreatedAfter} />
-                                            </div>
-                                            <div className="form-group col-md-3">
-                                                <label for="inputCreatedBefore">Created Before</label>
-                                                <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore} />
-                                            </div>
-                                            <div className="form-group col-md-3">
-                                                <label for="inputStatus">Status</label>
-                                                <select id="inputStatus" className="form-control" onChange={setInputStatus}>
-                                                    <option value="" selected>Any</option>
-                                                    <option value="open">Open</option>
-                                                    <option value="closed">Closed</option>
-                                                </select>
-                                            </div>
-                                            <div className="form-group col-md-3">
-                                                <label for="inputResultLimit">Result Limit</label>
-                                                <input type="number" min="0" max="1000" className="form-control" id="inputResultLimit" onChange={setInputLimit} />
-                                            </div>
-                                        </div>
-                                        <div className="form-row">
-                                            <div className="form-group col-md-3">
-                                                <label for="inputMinSignatureThreshold">Minimum Signature Threshold</label>
-                                                <input type="number" min="0" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold} />
-                                            </div>
-                                            <div className="form-group col-md-3">
-                                                <label for="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
-                                                <input type="number" min="0" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold} />
-                                            </div>
-                                            <div className="form-group col-md-3">
-                                                <label for="inputMinSignatureCollected">Minimum Signatures Collected</label>
-                                                <input type="number" min="0" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected} />
-                                            </div>
-                                            <div className="form-group col-md-3">
-                                                <label for="inputMaxSignatureCollected">Maximum Signatures Collected</label>
-                                                <input type="number" min="0" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected} />
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div id="searchResults">
-                <p className="text-center">{(firstSearchExecuted === true && searching === false) ? petitionSearchResults.length + " " + (petitionSearchResults.length === 1 ? "result":"results") + " returned":" "}</p>
+                    <p className="text-center">{(firstSearchExecuted === true && searching === false) ? petitionSearchResults.length + " " + (petitionSearchResults.length === 1 ? "result" : "results") + " returned" : " "}</p>
                     <ClipLoader
                         css={override}
                         size={150}

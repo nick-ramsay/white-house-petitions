@@ -2,6 +2,12 @@ p {
     margin: 0px;
 } /*p tags used for carriage returns but margins are neutralized*/
 
+.form-control:focus,.btn:focus {
+outline: none;
+box-shadow:none;
+border-color: none;
+}
+
 .carousel-item {
     /*background-color: #9b1c2c;*/
     color: #ffffff;
@@ -19,10 +25,16 @@ p {
     border: 1px #9b1c2c solid;
 }
 
-.view-petition-result-btn:hover, .search-btn:hover {
+.view-petition-result-btn:hover {
     background-color: #ffffff;
     color: #9b1c2c;
     border: 1px #9b1c2c solid;
+}
+
+.search-btn:hover {
+    background-color: whitesmoke;
+    color: #9b1c2c;
+    border: 1px #9b1c2c solid; 
 }
 
 .carouselViewPetitionBtn {
