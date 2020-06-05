@@ -3,6 +3,7 @@ import { css } from "@emotion/core";
 import carouselImages from "../../images/carousel-images/white-house-day.jpg";
 import moment from "moment";
 import ClipLoader from "react-spinners/ClipLoader";
+import BarLoader from "react-spinners/BarLoader";
 import Navbar from "../../components/Navbar/Navbar";
 import API from "../../utils/API";
 import "./style.css";
@@ -73,7 +74,7 @@ const Home = () => {
                     <div id="carouselExampleControls" className="carousel slide carousel-fade mt-3" data-ride="carousel">
                         <ClipLoader
                             css={override}
-                            size={150}
+                            size={240}
                             color={"#B22234"}
                             loading={loading}
                         />
@@ -176,9 +177,8 @@ const Home = () => {
                 </div>
                 <div id="searchResults">
                     <p className="text-center">{(firstSearchExecuted === true && searching === false) ? petitionSearchResults.length + " " + (petitionSearchResults.length === 1 ? "result" : "results") + " returned" : " "}</p>
-                    <ClipLoader
+                    <BarLoader
                         css={override}
-                        size={150}
                         color={"#B22234"}
                         loading={searching}
                     />
