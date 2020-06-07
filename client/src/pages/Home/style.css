@@ -40,6 +40,12 @@ border-color: none;
     border: 1px #9b1c2c solid; 
 }
 
+.carouselSlideInfo {
+    text-align: center;
+    width: 100%;
+    padding-top: 5px;
+}
+
 .carouselPetitionLink {
     color: #ffffff;
     text-decoration: none;
@@ -90,7 +96,6 @@ border-color: none;
    
 ::-webkit-scrollbar-thumb {
     background: #CC0C2F;
-    //border-radius: 10px;
 }
   
 ::-webkit-scrollbar-thumb:hover {

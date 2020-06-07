@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/core";
-import carouselImages from "../../images/carousel-images/white-house-day.jpg";
+import carouselImage from "../../images/carousel-images/white-house-day.jpg";
 import moment from "moment";
 import ClipLoader from "react-spinners/ClipLoader";
 import BarLoader from "react-spinners/BarLoader";
@@ -14,6 +14,8 @@ const override = css`
   border-color: #B22234;
   color: #B22234;
   `;
+
+const carouselImages = [carouselImage, carouselImage, carouselImage, carouselImage, carouselImage];
 
 const Home = () => {
 
@@ -31,8 +33,9 @@ const Home = () => {
         return [value, handleChange];
     } //This dynamicaly sets react hooks as respective form inputs are updated...
 
-    var unixOneMonthAgo = moment().subtract(30, "day").format("X");
+    const carouselImages = [carouselImage, carouselImage, carouselImage, carouselImage, carouselImage];
 
+    var [carouselImageIndex, setCarouselImageIndex] = useState(0);
     var [loading, setLoadingStatus] = useState([true]);
     var [searching, setSearchingStatus] = useState("");
     var [firstSearchExecuted, setFirstSearchExecuted] = useState("")
@@ -61,7 +64,7 @@ const Home = () => {
 
 
     useEffect(() => {
-        API.getFirstOneHundredPetitions("", unixOneMonthAgo, "", 25, "", "", "", "", "", "", "")
+        API.getFirstOneHundredPetitions("", moment().subtract(7, "day").format("X"), "", "", "", "", "", "", "", "", "open")
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
             .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); console.log(res) } else { setInitialPetitions([]) } });
     }, []);
@@ -80,10 +83,12 @@ const Home = () => {
                         />
                         <div className="carousel-inner pr-1 pl-1">
                             {initialPetitions.map((petition, index) => (
-                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImages})` }}>
+                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImages[carouselImageIndex]})` }}>
                                     <a href={petition.url} target="blank" className="carouselPetitionLink" role="button"><h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4></a>
-                                    <p>{(petition.signatureCount < petition.signatureThreshold) ? (petition.signatureThreshold - petition.signatureCount) + " signatures are still needed...":"Threshold met with " + petition.signatureCount + " signatures!"}</p>
-                                    <p>{moment(moment.unix(petition.deadline)).diff(moment(), 'days')} day(s) remaining</p>
+                                    <div className="carouselSlideInfo">
+                                        <p>{(petition.signatureCount < petition.signatureThreshold) ? (petition.signatureThreshold - petition.signatureCount) + " signatures are still needed..." : "Threshold met with " + petition.signatureCount + " signatures!"}</p>
+                                        <p>{moment(moment.unix(petition.deadline)).diff(moment(), 'days') !== 0 ? moment(moment.unix(petition.deadline)).diff(moment(), 'days') + (moment(moment.unix(petition.deadline)).diff(moment(), 'days') === 1 ? " day remaining" : " days remaining") : "Due Today"}</p>
+                                    </div>
                                 </div>
                             ))
                             }
@@ -110,54 +115,52 @@ const Home = () => {
                             <div className="card">
                                 <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div className="card-body">
-                                        <form>
-                                            <div className="form-row">
-                                                <div className="form-group col-md-12">
-                                                    <label for="inputPetition">Petition Description</label>
-                                                    <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody} />
-                                                </div>
+                                        <div className="form-row">
+                                            <div className="form-group col-md-12">
+                                                <label htmlFor="inputPetition">Petition Description</label>
+                                                <input type="text" className="form-control" placeholder="Search for terms in petition descriptions..." onChange={setInputBody} />
                                             </div>
-                                            <div className="form-row">
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputCreatedAfter">Created After</label>
-                                                    <input type="date" className="form-control" id="inputCreatedAfter" name="inputCreatedAfter" onChange={setInputCreatedAfter} />
-                                                </div>
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputCreatedBefore">Created Before</label>
-                                                    <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore} />
-                                                </div>
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputStatus">Status</label>
-                                                    <select id="inputStatus" className="form-control" onChange={setInputStatus}>
-                                                        <option value="" selected>Any</option>
-                                                        <option value="open">Open</option>
-                                                        <option value="closed">Closed</option>
-                                                    </select>
-                                                </div>
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputResultLimit">Result Limit</label>
-                                                    <input type="number" min="0" max="1000" className="form-control" id="inputResultLimit" onChange={setInputLimit} />
-                                                </div>
+                                        </div>
+                                        <div className="form-row">
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputCreatedAfter">Created After</label>
+                                                <input type="date" className="form-control" id="inputCreatedAfter" name="inputCreatedAfter" onChange={setInputCreatedAfter} />
                                             </div>
-                                            <div className="form-row">
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputMinSignatureThreshold">Minimum Signature Threshold</label>
-                                                    <input type="number" min="0" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold} />
-                                                </div>
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
-                                                    <input type="number" min="0" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold} />
-                                                </div>
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputMinSignatureCollected">Minimum Signatures Collected</label>
-                                                    <input type="number" min="0" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected} />
-                                                </div>
-                                                <div className="form-group col-md-3">
-                                                    <label for="inputMaxSignatureCollected">Maximum Signatures Collected</label>
-                                                    <input type="number" min="0" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected} />
-                                                </div>
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputCreatedBefore">Created Before</label>
+                                                <input type="date" className="form-control" id="inputCreatedBefore" onChange={setInputCreatedBefore} />
                                             </div>
-                                        </form>
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputStatus">Status</label>
+                                                <select id="inputStatus" className="form-control" defaultValue="open" onChange={setInputStatus}>
+                                                    <option value="">Any</option>
+                                                    <option value="open">Open</option>
+                                                    <option value="closed">Closed</option>
+                                                </select>
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputResultLimit">Result Limit</label>
+                                                <input type="number" min="0" max="1000" className="form-control" id="inputResultLimit" onChange={setInputLimit} />
+                                            </div>
+                                        </div>
+                                        <div className="form-row">
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputMinSignatureThreshold">Minimum Signature Threshold</label>
+                                                <input type="number" min="0" className="form-control" id="inputMinSignatureThreshold" onChange={setInputMinSignatureThreshold} />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputMaxSignatureThreshold">Maximum Signature Threshold</label>
+                                                <input type="number" min="0" className="form-control" id="inputMaxSignatureThreshold" onChange={setInputMaxSignatureThreshold} />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputMinSignatureCollected">Minimum Signatures Collected</label>
+                                                <input type="number" min="0" className="form-control" id="inputMinSignatureCollected" onChange={setInputMinSignatureCollected} />
+                                            </div>
+                                            <div className="form-group col-md-3">
+                                                <label htmlFor="inputMaxSignatureCollected">Maximum Signatures Collected</label>
+                                                <input type="number" min="0" className="form-control" id="inputMaxSignatureCollected" onChange={setInputMaxSignatureCollected} />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -181,16 +184,16 @@ const Home = () => {
                     />
                     {petitionSearchResults.map((searchResult, index) => (
                         <div key={index} className="card mt-3">
-                            <div class="card-body">
+                            <div className="card-body">
                                 <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
                                 <div className="pb-2">
                                     {searchResult.issues.map((resultIssue, index) => (
-                                        <span key={index} class="badge petition-category-badge mr-1">{decode(resultIssue.name)}</span>
+                                        <span key={index} className="badge petition-category-badge mr-1">{decode(resultIssue.name)}</span>
                                     ))
                                     }
                                 </div>
                                 <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
-                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" class="btn btn-sm btn-outline view-petition-result-btn mt-2">View Petition</button></a>
+                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-sm btn-outline view-petition-result-btn mt-2">View Petition</button></a>
                             </div>
                         </div>
                     ))
