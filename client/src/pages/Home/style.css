@@ -22,13 +22,13 @@ border-color: none;
     background-size:cover;
 }
 
-.view-petition-result-btn, .search-btn {
+.view-petition-result-btn, .search-btn, .close-parameter-btn  {
     color: #ffffff;
     background-color: #9b1c2c;
     border: 1px #9b1c2c solid;
 }
 
-.view-petition-result-btn:hover {
+.view-petition-result-btn:hover, .close-parameter-btn:hover {
     background-color: #ffffff;
     color: #9b1c2c;
     border: 1px #9b1c2c solid;
@@ -38,6 +38,18 @@ border-color: none;
     background-color: whitesmoke;
     color: #9b1c2c;
     border: 1px #9b1c2c solid; 
+}
+
+.advanced-search-btn {
+    background-color: #002663;
+    color: #ffffff;
+    border: 1px #002663 solid;
+}
+
+.advanced-search-btn:hover {
+    background-color: whitesmoke;
+    color: #002663;
+    border: 1px #002663 solid; 
 }
 
 .carouselSlideInfo {

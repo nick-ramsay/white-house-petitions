@@ -46,7 +46,7 @@ const Home = () => {
     var [inputBody, setInputBody] = useInput("");
     var [inputCreatedBefore, setInputCreatedBefore] = useInput("");
     var [inputCreatedAfter, setInputCreatedAfter] = useInput("");
-    var [inputStatus, setInputStatus] = useInput("");
+    var [inputStatus, setInputStatus] = useInput("open");
     var [inputLimit, setInputLimit] = useInput("");
     var [inputMinSignatureThreshold, setInputMinSignatureThreshold] = useInput("");
     var [inputMaxSignatureThreshold, setInputMaxSignatureThreshold] = useInput("");
@@ -112,9 +112,14 @@ const Home = () => {
                             </div>
                         </div>
                         <div className="accordion" id="advancedSearchParameters">
-                            <div className="card">
-                                <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                    <div className="card-body">
+                            <div id="collapseOne" className="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div className="text-center">
+                                    <button className="btn btn-sm advanced-search-btn m-1" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                        Close
+                                            </button>
+                                </div>
+                                <div className="card">
+                                    <div className="card-body pt-0">
                                         <div className="form-row">
                                             <div className="form-group col-md-12">
                                                 <label htmlFor="inputPetition">Petition Description</label>
@@ -168,7 +173,7 @@ const Home = () => {
                         <div className="form-row">
                             <div className="form-group col-md-12 mt-1 text-center">
                                 <button className="btn search-btn m-1" type="button" onClick={petitionSearch}>Search</button>
-                                <button className="btn btn-dark text-left m-1" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <button className="btn advanced-search-btn text-left m-1" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                                     Advanced Search
                                 </button>
                             </div>
