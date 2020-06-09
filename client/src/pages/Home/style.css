@@ -34,13 +34,13 @@ border-color: none;
     border: 1px #002663 solid;
 }
 
-.more-details-result-btn, .search-btn, .close-parameter-btn  {
+.more-details-result-btn, .search-btn, .close-parameter-btn, .close-modal-btn  {
     color: #ffffff;
     background-color: #9b1c2c;
     border: 1px #9b1c2c solid;
 }
 
-.more-details-result-btn:hover, .close-parameter-btn:hover {
+.more-details-result-btn:hover, .close-parameter-btn:hover, .close-modal-btn:hover {
     background-color: #ffffff;
     color: #9b1c2c;
     border: 1px #9b1c2c solid;

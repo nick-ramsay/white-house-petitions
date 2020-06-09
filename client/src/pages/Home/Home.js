@@ -207,7 +207,25 @@ const Home = () => {
                                 </div>
                                 <p className="search-result-details">{searchResult.status}</p>
                                 <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
-                                {/*<button type="button" className="btn btn-sm btn-outline more-details-result-btn mt-2 mr-2">More Details</button>*/}
+                                <div className="modal fade" id={"result-detail-modal-" + index} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div className="modal-dialog modal-dialog-centered" role="document">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h5 className="modal-title" id="exampleModalLongTitle">{decode(searchResult.title)}</h5>
+                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div className="modal-body">
+                                                {decode(searchResult.body)}
+      </div>
+                                            <div className="modal-footer">
+                                                <button type="button" className="btn btn-sm close-modal-btn" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" className="btn btn-sm btn-outline more-details-result-btn mt-2 mr-2" data-toggle="modal" data-target={"#result-detail-modal-" + index}>More Details</button>
                                 <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-sm btn-outline view-petition-result-btn mt-2">Go to Petition</button></a>
                             </div>
                         </div>
