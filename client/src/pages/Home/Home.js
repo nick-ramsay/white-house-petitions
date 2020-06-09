@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { css } from "@emotion/core";
 import carouselImage from "../../images/carousel-images/white-house-day.jpg";
 import moment from "moment";
@@ -14,8 +14,6 @@ const override = css`
   border-color: #B22234;
   color: #B22234;
   `;
-
-const carouselImages = [carouselImage, carouselImage, carouselImage, carouselImage, carouselImage];
 
 const Home = () => {
 
@@ -33,7 +31,7 @@ const Home = () => {
         return [value, handleChange];
     } //This dynamicaly sets react hooks as respective form inputs are updated...
 
-    const carouselImages = [carouselImage, carouselImage, carouselImage, carouselImage, carouselImage];
+    const carouselImagesArray = [carouselImage, carouselImage, carouselImage, carouselImage, carouselImage];
 
     var [carouselImageIndex, setCarouselImageIndex] = useState(0);
     var [loading, setLoadingStatus] = useState([true]);
@@ -53,6 +51,16 @@ const Home = () => {
     var [inputMinSignatureCollected, setInputMinSignatureCollected] = useInput("");
     var [inputMaxSignatureCollected, setInputMaxSignatureCollected] = useInput("");
 
+    const rotateCarouselImage = () => {
+        console.log(carouselImageIndex);
+        if (carouselImageIndex < 5) {
+            setCarouselImageIndex(carouselImageIndex += 1);
+            console.log(carouselImageIndex);
+        } else {
+            setCarouselImageIndex(0);
+            console.log(carouselImageIndex);
+        }
+    };
 
     const petitionSearch = () => {
         setPetitionSearchResults([]);
@@ -60,13 +68,13 @@ const Home = () => {
         API.getFirstOneHundredPetitions(moment(inputCreatedBefore, "YYYY-MM-DD").format("X"), moment(inputCreatedAfter, "YYYY-MM-DD").format("X"), "", inputLimit, inputTitle, inputBody, inputMaxSignatureThreshold, inputMinSignatureThreshold, inputMaxSignatureCollected, inputMinSignatureCollected, inputStatus)
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
             .then(res => { if (res !== undefined) { setPetitionSearchResults(res); setSearchingStatus(false); setFirstSearchExecuted(true); console.log(res) } else { setPetitionSearchResults([]) } });
-    }
+    };
 
 
     useEffect(() => {
         API.getFirstOneHundredPetitions("", moment().subtract(7, "day").format("X"), "", "", "", "", "", "", "", "", "open")
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); console.log(res) } else { setInitialPetitions([]) } });
+            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); rotateCarouselImage(); console.log(res) } else { setInitialPetitions([]) } });
     }, []);
 
     return (
@@ -83,7 +91,7 @@ const Home = () => {
                         />
                         <div className="carousel-inner pr-1 pl-1">
                             {initialPetitions.map((petition, index) => (
-                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImages[carouselImageIndex]})` }}>
+                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImagesArray[carouselImageIndex]})` }}>
                                     <a href={petition.url} target="blank" className="carouselPetitionLink" role="button"><h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4></a>
                                     <div className="carouselSlideInfo">
                                         <p>{(petition.signatureCount < petition.signatureThreshold) ? (petition.signatureThreshold - petition.signatureCount) + " signatures are still needed..." : "Threshold met with " + petition.signatureCount + " signatures!"}</p>
@@ -119,7 +127,7 @@ const Home = () => {
                                             </button>
                                 </div>
                                 <div className="card">
-                                    <div className="card-body pt-0">
+                                    <div className="card-body">
                                         <div className="form-row">
                                             <div className="form-group col-md-12">
                                                 <label htmlFor="inputPetition">Petition Description</label>
@@ -197,8 +205,10 @@ const Home = () => {
                                     ))
                                     }
                                 </div>
+                                <p className="search-result-details">{searchResult.status}</p>
                                 <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
-                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-sm btn-outline view-petition-result-btn mt-2">View Petition</button></a>
+                                {/*<button type="button" className="btn btn-sm btn-outline more-details-result-btn mt-2 mr-2">More Details</button>*/}
+                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-sm btn-outline view-petition-result-btn mt-2">Go to Petition</button></a>
                             </div>
                         </div>
                     ))
