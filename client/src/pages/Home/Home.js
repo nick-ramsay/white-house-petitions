@@ -18,7 +18,7 @@ const override = css`
 const Home = () => {
 
     const decode = (str) => {
-        return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+        return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/nxt/g, "n't").replace(/txs/g, "t's");
     }
 
     const commaFormat = (num) => {
@@ -57,14 +57,14 @@ const Home = () => {
         setSearchingStatus(true);
         API.getFirstOneHundredPetitions(moment(inputCreatedBefore, "YYYY-MM-DD").format("X"), moment(inputCreatedAfter, "YYYY-MM-DD").format("X"), "", inputLimit, inputTitle, inputBody, inputMaxSignatureThreshold, inputMinSignatureThreshold, inputMaxSignatureCollected, inputMinSignatureCollected, inputStatus)
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); setSearchingStatus(false); setFirstSearchExecuted(true); console.log(res) } else { setPetitionSearchResults([]) } });
+            .then(res => { if (res !== undefined) { setPetitionSearchResults(res); setSearchingStatus(false); setFirstSearchExecuted(true) } else { setPetitionSearchResults([]) } });
     };
 
 
     useEffect(() => {
         API.getFirstOneHundredPetitions("", moment().subtract(7, "day").format("X"), "", "", "", "", "", "", "", "", "open")
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); console.log(res) } else { setInitialPetitions([]) } });
+            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false) } else { setInitialPetitions([]) } });
     }, []);
 
     return (
@@ -81,11 +81,16 @@ const Home = () => {
                         />
                         <div className="carousel-inner pr-1 pl-1">
                             {initialPetitions.map((petition, index) => (
-                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImage})` }}>
-                                    <a href={petition.url} target="blank" className="carouselPetitionLink" role="button"><h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4></a>
+                                <div key={index} className={index === 0 ? "carousel-item active pt-2" : "carousel-item pt-2"} style={{ backgroundImage: `url(${carouselImage})` }}>
+                                    <a href={petition.url} target="blank" className="carouselPetitionLink" role="button"><h5 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h5></a>
                                     <div className="carouselSlideInfo">
-                                        <p>{(petition.signatureCount < petition.signatureThreshold) ? (commaFormat(petition.signatureThreshold - petition.signatureCount)) + " signatures are still needed..." : "Threshold met with " + commaFormat(petition.signatureCount) + " signatures!"}</p>
-                                        <p>{moment(moment.unix(petition.deadline)).diff(moment(), 'days') !== 0 ? moment(moment.unix(petition.deadline)).diff(moment(), 'days') + (moment(moment.unix(petition.deadline)).diff(moment(), 'days') === 1 ? " day remaining" : " days remaining") : "Due Today"}</p>
+                                        <div className="col-md-8 offset-md-2">
+                                            <div className="progress progress-carousel mb-2">
+                                                <div className="progress-bar signature-percentage-progress-carousel" style={{ width: ((petition.signatureCount / petition.signatureThreshold > 1) ? 100 : Math.round(((petition.signatureCount / petition.signatureThreshold) * 100))) + "%" }} role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                        </div>
+                                        <h6>{(petition.signatureCount < petition.signatureThreshold) ? (commaFormat(petition.signatureThreshold - petition.signatureCount)) + " signatures are still needed..." : "Threshold met with " + commaFormat(petition.signatureCount) + " signatures!"}</h6>
+                                        <h6>{moment(moment.unix(petition.deadline)).diff(moment(), 'days') !== 0 ? moment(moment.unix(petition.deadline)).diff(moment(), 'days') + (moment(moment.unix(petition.deadline)).diff(moment(), 'days') === 1 ? " day remaining" : " days remaining") : "Due Today"}</h6>
                                     </div>
                                 </div>
                             ))
@@ -172,7 +177,7 @@ const Home = () => {
                             <div className="form-group col-md-12 mt-1 text-center">
                                 <button className="btn search-btn m-1" type="button" onClick={petitionSearch}>Search</button>
                                 <button className="btn advanced-search-btn text-left m-1" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                    Advanced Search
+                                    Advanced
                                 </button>
                             </div>
                         </div>
@@ -190,26 +195,29 @@ const Home = () => {
                         .map((searchResult, index) => (
                             <div key={index} className="card mt-3">
                                 <div className="card-body">
-                                    <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
-                                    <div className="pb-2">
+                                    <p className="search-result-details"><strong>{decode(searchResult.title)} (<span className="title-status">{searchResult.status}</span>)</strong></p>
+                                    <div className="pb-1">
                                         {searchResult.issues.map((resultIssue, index) => (
                                             <span key={index} className="badge petition-category-badge mr-1">{decode(resultIssue.name)}</span>
                                         ))
                                         }
                                     </div>
-                                    <p className="search-result-details">{searchResult.status}</p>
                                     <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
                                     <div className="modal fade" id={"result-detail-modal-" + index} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div className="modal-dialog modal-dialog-centered" role="document">
                                             <div className="modal-content">
                                                 <div className="modal-header">
-                                                    <h5 className="modal-title" id="exampleModalLongTitle">{decode(searchResult.title)}</h5>
+                                                    <h5 className="modal-title" id="exampleModalLongTitle"><strong>{decode(searchResult.title)}</strong></h5>
                                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div className="modal-body">
-                                                    {decode(searchResult.body)}
+                                                    <div className="progress mb-2">
+                                                        <div className="progress-bar signature-percentage-progress" style={{ width: ((searchResult.signatureCount / searchResult.signatureThreshold > 1) ? 100 : Math.round(((searchResult.signatureCount / searchResult.signatureThreshold) * 100))) + "%" }} role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    </div>
+                                                    <p className="text-center mb-2"><strong>{commaFormat(searchResult.signatureCount) + " of " + commaFormat(searchResult.signatureThreshold) + " signatures collected"}</strong></p>
+                                                    <p>{decode(searchResult.body)}</p>
                                                 </div>
                                                 <div className="modal-footer">
                                                     <button type="button" className="btn btn-sm close-modal-btn" data-dismiss="modal">Close</button>
