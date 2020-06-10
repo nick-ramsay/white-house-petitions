@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { css } from "@emotion/core";
 import carouselImage from "../../images/carousel-images/white-house-day.jpg";
 import moment from "moment";
@@ -21,6 +21,10 @@ const Home = () => {
         return str.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
     }
 
+    const commaFormat = (num) => {
+        return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+    }
+
     const useInput = (initialValue) => {
         const [value, setValue] = useState(initialValue);
 
@@ -31,9 +35,6 @@ const Home = () => {
         return [value, handleChange];
     } //This dynamicaly sets react hooks as respective form inputs are updated...
 
-    const carouselImagesArray = [carouselImage, carouselImage, carouselImage, carouselImage, carouselImage];
-
-    var [carouselImageIndex, setCarouselImageIndex] = useState(0);
     var [loading, setLoadingStatus] = useState([true]);
     var [searching, setSearchingStatus] = useState("");
     var [firstSearchExecuted, setFirstSearchExecuted] = useState("")
@@ -51,17 +52,6 @@ const Home = () => {
     var [inputMinSignatureCollected, setInputMinSignatureCollected] = useInput("");
     var [inputMaxSignatureCollected, setInputMaxSignatureCollected] = useInput("");
 
-    const rotateCarouselImage = () => {
-        console.log(carouselImageIndex);
-        if (carouselImageIndex < 5) {
-            setCarouselImageIndex(carouselImageIndex += 1);
-            console.log(carouselImageIndex);
-        } else {
-            setCarouselImageIndex(0);
-            console.log(carouselImageIndex);
-        }
-    };
-
     const petitionSearch = () => {
         setPetitionSearchResults([]);
         setSearchingStatus(true);
@@ -74,7 +64,7 @@ const Home = () => {
     useEffect(() => {
         API.getFirstOneHundredPetitions("", moment().subtract(7, "day").format("X"), "", "", "", "", "", "", "", "", "open")
             //createdBefore, createdAfter, offset, limit, title, body, signatureThresholdCeiling, signatureThresholdFloor, signatureCountCeiling, signatureCountFloor, status
-            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); rotateCarouselImage(); console.log(res) } else { setInitialPetitions([]) } });
+            .then(res => { if (res !== undefined) { setInitialPetitions(res); setLoadingStatus(false); console.log(res) } else { setInitialPetitions([]) } });
     }, []);
 
     return (
@@ -91,10 +81,10 @@ const Home = () => {
                         />
                         <div className="carousel-inner pr-1 pl-1">
                             {initialPetitions.map((petition, index) => (
-                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImagesArray[carouselImageIndex]})` }}>
+                                <div key={index} className={index === 0 ? "carousel-item active" : "carousel-item"} style={{ backgroundImage: `url(${carouselImage})` }}>
                                     <a href={petition.url} target="blank" className="carouselPetitionLink" role="button"><h4 className="col-md-10 offset-md-1"><strong>{decode(petition.title)}</strong></h4></a>
                                     <div className="carouselSlideInfo">
-                                        <p>{(petition.signatureCount < petition.signatureThreshold) ? (petition.signatureThreshold - petition.signatureCount) + " signatures are still needed..." : "Threshold met with " + petition.signatureCount + " signatures!"}</p>
+                                        <p>{(petition.signatureCount < petition.signatureThreshold) ? (commaFormat(petition.signatureThreshold - petition.signatureCount)) + " signatures are still needed..." : "Threshold met with " + commaFormat(petition.signatureCount) + " signatures!"}</p>
                                         <p>{moment(moment.unix(petition.deadline)).diff(moment(), 'days') !== 0 ? moment(moment.unix(petition.deadline)).diff(moment(), 'days') + (moment(moment.unix(petition.deadline)).diff(moment(), 'days') === 1 ? " day remaining" : " days remaining") : "Due Today"}</p>
                                     </div>
                                 </div>
@@ -195,41 +185,43 @@ const Home = () => {
                         color={"#B22234"}
                         loading={searching}
                     />
-                    {petitionSearchResults.map((searchResult, index) => (
-                        <div key={index} className="card mt-3">
-                            <div className="card-body">
-                                <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
-                                <div className="pb-2">
-                                    {searchResult.issues.map((resultIssue, index) => (
-                                        <span key={index} className="badge petition-category-badge mr-1">{decode(resultIssue.name)}</span>
-                                    ))
-                                    }
-                                </div>
-                                <p className="search-result-details">{searchResult.status}</p>
-                                <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
-                                <div className="modal fade" id={"result-detail-modal-" + index} tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                                    <div className="modal-dialog modal-dialog-centered" role="document">
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title" id="exampleModalLongTitle">{decode(searchResult.title)}</h5>
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div className="modal-body">
-                                                {decode(searchResult.body)}
-      </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-sm close-modal-btn" data-dismiss="modal">Close</button>
+                    {petitionSearchResults
+                        .sort((a, b) => a.id < b.id ? 1 : -1)
+                        .map((searchResult, index) => (
+                            <div key={index} className="card mt-3">
+                                <div className="card-body">
+                                    <p className="search-result-details"><strong>{decode(searchResult.title)}</strong></p>
+                                    <div className="pb-2">
+                                        {searchResult.issues.map((resultIssue, index) => (
+                                            <span key={index} className="badge petition-category-badge mr-1">{decode(resultIssue.name)}</span>
+                                        ))
+                                        }
+                                    </div>
+                                    <p className="search-result-details">{searchResult.status}</p>
+                                    <p className="search-result-details">{moment(moment.unix(searchResult.created)).format("LL")}</p>
+                                    <div className="modal fade" id={"result-detail-modal-" + index} tabIndex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div className="modal-dialog modal-dialog-centered" role="document">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <h5 className="modal-title" id="exampleModalLongTitle">{decode(searchResult.title)}</h5>
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div className="modal-body">
+                                                    {decode(searchResult.body)}
+                                                </div>
+                                                <div className="modal-footer">
+                                                    <button type="button" className="btn btn-sm close-modal-btn" data-dismiss="modal">Close</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <button type="button" className="btn btn-sm btn-outline more-details-result-btn mt-2 mr-2" data-toggle="modal" data-target={"#result-detail-modal-" + index}>More Details</button>
+                                    <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-sm btn-outline view-petition-result-btn mt-2">Go to Petition</button></a>
                                 </div>
-                                <button type="button" className="btn btn-sm btn-outline more-details-result-btn mt-2 mr-2" data-toggle="modal" data-target={"#result-detail-modal-" + index}>More Details</button>
-                                <a href={searchResult.url} target="_blank" rel="noopener noreferrer"><button type="button" className="btn btn-sm btn-outline view-petition-result-btn mt-2">Go to Petition</button></a>
                             </div>
-                        </div>
-                    ))
+                        ))
                     }
                 </div>
             </div>
