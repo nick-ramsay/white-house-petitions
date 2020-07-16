@@ -3,3 +3,7 @@ body {
   background-color: whitesmoke;
   font-family: 'Didact Gothic', sans-serif;
 }
+
+.form-control:focus {
+  border-color: #002663
+}
