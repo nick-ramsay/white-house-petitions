@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/nick-ramsay/white-house-petitions#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "env": "0.0.2",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
